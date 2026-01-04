@@ -17,13 +17,10 @@ use App\Http\Controllers\KebayaController;
 use Illuminate\Support\Facades\Auth;
 
 Route::middleware(MenuMiddleware::class)->group(function () {
-    // Routes that don't require authentication
     Route::get('/', [KebayaController::class, 'landingPage'])->name('kebayas.landing');
-
     Route::middleware(BerhasilMiddleware::class)->group(function () {
         Route::get('/login', [ControllersLoginController::class, 'showLoginForm'])->name('login');
         Route::post('/login', [ControllersLoginController::class, 'login']);
-
         Route::get('/register', [ControllersRegisterController::class, 'showRegistrationForm'])->name('register');
         Route::post('/register', [ControllersRegisterController::class, 'register']);
     });
@@ -31,10 +28,9 @@ Route::middleware(MenuMiddleware::class)->group(function () {
     Route::get('/profile/settings', 'ProfileController@settings')->name('profile.settings');
 
     Route::middleware(gagalMiddleware::class)->group(function () {
-        // Menambahkan nama route "main" yang mengarah ke view layouts.main
         Route::get('/layouts', function () {
             return view('layouts.main');
-        })->name('main');  // Menetapkan nama route sebagai 'main'
+        })->name('main');
 
         // Main route yang mengecek apakah user sudah login
         Route::get('/dashboard', function () {

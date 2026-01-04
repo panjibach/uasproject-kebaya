@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('kebaya_items', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('kebaya_model_id')->constrained('kebaya_models');
+            $table->foreignId('vendor_id')->constrained('users');
+            $table->string('size', 10);
+            $table->string('color', 50);
+
+            $table->enum('status', ['available', 'rented', 'maintenance'])
+                ->default('available');
+
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('kebaya_items');
+    }
+};

@@ -2,92 +2,19 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use App\Models\role;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class User extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $table ='users';
-    protected $primaryKey ='ID_USER';
-    protected $keyType = 'int';
-    protected $fillable = [
-        'name',
-        'username',
-        'email',
-        'password',
-        'wa',
-        'ID_JENIS_USER',
-        'STATUS_USER',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+    public function role() {
+        return $this->belongsTo(Role::class);
     }
 
-    public function jenisUser()
-    {
-        return $this->belongsTo(JenisUser::class, 'ID_JENIS_USER', 'ID_JENIS_USER');
+    public function rentals() {
+        return $this->hasMany(Rental::class);
     }
 
-    public function menu()
-    {
-        return $this->belongsTo(Menu::class, 'MENU_ID', 'MENU_ID');
+    public function kebayaItems() {
+        return $this->hasMany(KebayaItem::class, 'vendor_id');
     }
-
-    public function settingMenus()
-    {
-        return $this->hasMany(SettingMenu::class, 'ID_JENIS_USER', 'ID_JENIS_USER'); // Assuming 'id' is the user's identifier
-    }
-
-    public function ownedKebayas()
-    {
-        return $this->hasMany(Kebaya::class, 'ID_USER', 'ID_USER');
-    }
-
-    public function rentals()
-    {
-        return $this->hasMany(Rental::class, 'ID_USER', 'ID_USER');
-    }
-
-    public function canUploadKebaya()
-    {
-        return $this->ID_JENIS_USER == 3;
-    }
-
-    public function canRentKebaya()
-    {
-        return $this->ID_JENIS_USER == 2;
-    }
-
 }
-    

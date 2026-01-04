@@ -2,44 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Rental extends Model
 {
-    use HasFactory;
-
-    protected $table = 'rentals';
-    protected $primaryKey = 'ID_RENTAL';
-    public $timestamps = false;
-
-    protected $fillable = [
-        'ID_KEBAYA',
-        'ID_USER',
-        'TANGGAL_MULAI',
-        'TANGGAL_SELESAI',
-        'TOTAL_HARGA',
-        'STATUS',
-        'CREATE_BY',
-        'CREATE_DATE',
-        'DELETE_MARK',
-        'UPDATE_BY',
-        'UPDATE_DATE',
-    ];
-
-    protected $casts = [
-        'TANGGAL_MULAI' => 'date',
-        'TANGGAL_SELESAI' => 'date',
-    ];
-
-    public function kebaya()
-    {
-        return $this->belongsTo(Kebaya::class, 'ID_KEBAYA', 'ID_KEBAYA');
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 
-    public function renter()
-    {
-        return $this->belongsTo(User::class, 'ID_USER', 'ID_USER');
+    public function items() {
+        return $this->hasMany(RentalItem::class);
+    }
+
+    public function payment() {
+        return $this->hasOne(Payment::class);
+    }
+
+    public function return() {
+        return $this->hasOne(ReturnModel::class);
     }
 }
-
