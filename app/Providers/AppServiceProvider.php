@@ -19,20 +19,7 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
 
         // Mengirimkan data menu ke sidebar secara otomatis
-        View::composer('layouts.sidebar', function ($view) {
-            if (Auth::check()) {
-                $user = Auth::user();
-                $allowedMenus = SettingMenu::where('ID_JENIS_USER', $user->ID_JENIS_USER)
-                                    ->pluck('MENU_ID')
-                                    ->toArray();
 
-                $menus = menu::whereIn('MENU_ID', $allowedMenus)->get();
-            } else {
-                $menus = collect(); // Jika tidak ada user login, kosongkan menu
-            }
-
-            $view->with('menus', $menus);
-        });
     }
     public function register(): void
     {
